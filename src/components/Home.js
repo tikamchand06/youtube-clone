@@ -24,12 +24,12 @@ const Home = () => {
             description,
             publishedAt,
             channelTitle,
-            thumbnails: {
-              standard: { url }
-            }
+            thumbnails: { standard, high }
           }
         } = item;
-        return { id, title, description, publishedAt, channelTitle, url };
+
+        const url = standard ? standard.url : high.url;
+        return { id, title, description, publishedAt, channelTitle, url: url };
       });
     }
 
@@ -39,7 +39,7 @@ const Home = () => {
   // Get Results
   useEffect(() => {
     getTrendingVideos();
-  });
+  }, []);
 
   if (isLoading) {
     return (

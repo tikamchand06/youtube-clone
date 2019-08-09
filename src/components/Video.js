@@ -55,7 +55,7 @@ const Video = ({
               width="100%"
               height="100%"
               src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-              style={{ border: 0 }}
+              style={{ border: 0, minHeight: '70vh' }}
               title="Playing Youtube videos"
             />
           </Grid.Column>

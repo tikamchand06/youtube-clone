@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Dimmer, Loader, Grid, Image, Header, Card, Icon } from 'semantic-ui-react';
+import { Container, Dimmer, Loader, Grid, Image, Header, Card, Icon, Embed } from 'semantic-ui-react';
 import Moment from 'react-moment';
 import youtube from '../api/youtube';
 
@@ -51,13 +51,7 @@ const Video = ({
       <Grid>
         <Grid.Row>
           <Grid.Column width="11">
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-              style={{ border: 0, minHeight: '70vh' }}
-              title="Playing Youtube videos"
-            />
+            <Embed id={videoId} source="youtube" autoplay active />
           </Grid.Column>
           <Grid.Column width="5">
             <Header as="h3">Related Videos</Header>
@@ -66,7 +60,7 @@ const Video = ({
                 <Loader inverted>Loading</Loader>
               </Dimmer>
             ) : (
-              <Container style={{ maxHeight: '65vh', overflow: 'hidden auto' }}>
+              <Container style={{ maxHeight: 'calc(77vh - 21px)', overflow: 'hidden auto' }}>
                 {relatedVideos.map((video, key) => (
                   <Card
                     key={key}

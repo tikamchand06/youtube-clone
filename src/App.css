@@ -18,3 +18,16 @@ body ::-webkit-scrollbar {
 .ui.fluid.container {
   padding: 1.5rem;
 }
+
+@media screen and (max-width: 720px) {
+  .ui.grid.footer > [class*='middle aligned'] .eight.wide.column,
+  .ui.grid > .row > .eleven.wide.column,
+  .ui.grid > .row > .five.wide.column {
+    width: 100% !important;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .ui.container {
+    width: 100% !important;
+  }
+}

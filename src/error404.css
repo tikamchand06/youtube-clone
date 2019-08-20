@@ -1,0 +1,15 @@
+.ui.container.error-404 {
+  padding: 1rem 0 6rem;
+}
+.error-404 h1 {
+  font-size: 230px !important;
+  background: -webkit-linear-gradient(45deg, #09009f, #00ff95 80%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text;
+  -webkit-text-fill-color: transparent !important;
+}
+.error-404 .ui.button {
+  border-radius: 40px;
+  box-shadow: 0px 4px 15px -5px #0046d5;
+  -webkit-box-shadow: 0px 4px 15px -5px #0046d5;
+}

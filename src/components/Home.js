@@ -7,37 +7,43 @@ const Home = () => {
   const [state, setState] = useState({ isLoading: true, results: [] });
   const { isLoading, results } = state;
 
-  const getTrendingVideos = async () => {
-    let {
-      data: { items }
-    } = await youtube.get('videos', {
-      params: { part: 'snippet', maxResults: 25, key: process.env.REACT_APP_API_KEY, chart: 'mostPopular', regionCode: 'IN' }
-    });
-
-    // Get Required Data
-    if (items.length) {
-      items = items.map(item => {
-        const {
-          id,
-          snippet: {
-            title,
-            description,
-            publishedAt,
-            channelTitle,
-            thumbnails: { standard, high }
-          }
-        } = item;
-
-        const url = standard ? standard.url : high.url;
-        return { id, title, description, publishedAt, channelTitle, url: url };
-      });
-    }
-
-    setState({ ...state, results: items, isLoading: false });
-  };
-
-  // Get Results
   useEffect(() => {
+    // Get Trending Videos
+    const getTrendingVideos = async () => {
+      let {
+        data: { items }
+      } = await youtube.get('videos', {
+        params: {
+          part: 'snippet, contentDetails, statistics',
+          maxResults: 25,
+          key: process.env.REACT_APP_API_KEY,
+          chart: 'mostPopular',
+          regionCode: 'IN'
+        }
+      });
+
+      // Get Required Data
+      if (items.length) {
+        items = items.map(item => {
+          const {
+            id,
+            snippet: {
+              title,
+              description,
+              publishedAt,
+              channelId,
+              channelTitle,
+              thumbnails: { standard, high }
+            }
+          } = item;
+
+          const url = standard ? standard.url : high.url;
+          return { id, title, description, publishedAt, channelId, channelTitle, url: url };
+        });
+      }
+
+      setState({ ...state, results: items, isLoading: false });
+    };
     getTrendingVideos();
   }, []);
 

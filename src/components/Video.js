@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Dimmer, Loader, Grid, Image, Header, Card, Icon, Divider } from 'semantic-ui-react';
+import { Container, Dimmer, Loader, Grid, Image, Header, Card, Icon, Divider, Select } from 'semantic-ui-react';
 import Plyr from 'plyr';
 import moment from 'moment';
+var fileDownload = require('js-file-download');
 
 // const API_BASE_URL = 'http://localhost:4000';
 const API_BASE_URL = 'https://tcmytdclone.herokuapp.com';
@@ -15,40 +16,12 @@ const Video = ({
   const { isLoading, info } = state;
 
   useEffect(() => {
-    // Get Related videos
-    const getRelatedVideos = async () => {
-      // let {
-      //   data: { items }
-      // } = await youtube.get('search', {
-      //   params: { part: 'snippet', maxResults: 10, key: process.env.REACT_APP_API_KEY, relatedToVideoId: videoId, type: 'video' }
-      // });
-
-      // // Get Required Data
-      // if (items.length) {
-      //   items = items.map(item => {
-      //     const {
-      //       id: { videoId },
-      //       snippet: {
-      //         title,
-      //         description,
-      //         publishedAt,
-      //         channelTitle,
-      //         thumbnails: {
-      //           medium: { url }
-      //         }
-      //       }
-      //     } = item;
-      //     return { id: videoId, title, description, publishedAt, channelTitle, url };
-      //   });
-      // }
-
-      // setState({ ...state, relatedVideos: items, isLoading: false });
-
+    // Get Video Info
+    const getVideoInfo = async () => {
       // Enable Plyr
       new Plyr(document.getElementById('player'));
 
-      // Get Video Info
-      await fetch(`${API_BASE_URL}/info?id=${videoId}`)
+      await fetch(`${API_BASE_URL}/info/${videoId}`)
         .then(response => response.json())
         .then(result => {
           const {
@@ -90,7 +63,7 @@ const Video = ({
         })
         .catch(error => console.log('Request failed', error));
     };
-    getRelatedVideos();
+    getVideoInfo();
   }, [videoId]);
 
   const calculateVideoDuration = duration => {
@@ -108,6 +81,23 @@ const Video = ({
 
   const relatedVideos = info && info.related_videos ? info.related_videos : [];
 
+  // Download Video Options
+  let downloadOptions = [];
+  if (info && info.formats) {
+    downloadOptions = info.formats.map((format, key) => {
+      const { resolution, container, type, size, url, audioBitrate } = format;
+      return {
+        key,
+        text: resolution
+          ? `${resolution} ${size ? `(${size})` : ''} - ${container}`
+          : `${type.split(';')[0]} - ${container} ${audioBitrate}kbps`,
+        value: key,
+        container,
+        url
+      };
+    });
+  }
+
   return (
     <Container fluid>
       <Grid>
@@ -121,8 +111,21 @@ const Video = ({
             ) : (
               <Container fluid style={{ padding: '1rem 0' }} textAlign="left">
                 <Header as="h4">{info.title}</Header>
-                <Header as="h5" color="grey">
-                  {info.viewCount} Views
+                <Header
+                  as="h5"
+                  color="grey"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}
+                >
+                  <span>{info.viewCount} Views</span>
+                  <Select
+                    placeholder="Download Video"
+                    options={downloadOptions}
+                    onChange={(e, d) => {
+                      const video = downloadOptions[d.value];
+                      fileDownload(video.url, `${info.title}.${video.container}`);
+                    }}
+                    style={{ minWidth: '25%' }}
+                  />
                 </Header>
                 <Divider />
                 <Grid style={{ padding: 0 }}>
@@ -131,7 +134,7 @@ const Video = ({
                       <Image src={info.author.avatar} size="tiny" verticalAlign="middle" circular />
                     </Grid.Column>
                     <Grid.Column width="10" verticalAlign="middle">
-                      <a href={info.author.channel_url} target="_blank">
+                      <a href={info.author.channel_url} target="_blank" rel="noopener noreferrer">
                         {info.author.name}
                       </a>
                       <br />
@@ -139,7 +142,7 @@ const Video = ({
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <p>{info.description}</p>
+                <p dangerouslySetInnerHTML={{ __html: info.description }} />
               </Container>
             )}
           </Grid.Column>
@@ -187,6 +190,7 @@ const Video = ({
                       </Card>
                     )
                 )}
+                {relatedVideos.length === 0 && <i>No videos available.</i>}
               </Container>
             )}
           </Grid.Column>

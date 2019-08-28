@@ -4,8 +4,8 @@ import Plyr from 'plyr';
 import moment from 'moment';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:4000';
-// const API_BASE_URL = 'https://tcmytdclone.herokuapp.com';
+// const API_BASE_URL = 'http://localhost:4000';
+const API_BASE_URL = 'https://tcmytdclone.herokuapp.com';
 
 const Video = ({
   match: {

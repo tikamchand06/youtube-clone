@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Dimmer, Loader, Grid, Image, Header, Card, Icon, Divider, Select } from 'semantic-ui-react';
 import Plyr from 'plyr';
 import moment from 'moment';
-var fileDownload = require('js-file-download');
+import axios from 'axios';
 
-// const API_BASE_URL = 'http://localhost:4000';
-const API_BASE_URL = 'https://tcmytdclone.herokuapp.com';
+const API_BASE_URL = 'http://localhost:4000';
+// const API_BASE_URL = 'https://tcmytdclone.herokuapp.com';
 
 const Video = ({
   match: {
@@ -20,48 +20,43 @@ const Video = ({
     const getVideoInfo = async () => {
       // Enable Plyr
       new Plyr(document.getElementById('player'));
+      const result = await axios.get(`${API_BASE_URL}/info/${videoId}`);
+      const {
+        author,
+        description,
+        formats,
+        media,
+        published,
+        related_videos,
+        timestamp,
+        title,
+        video_id,
+        video_url,
+        player_response: {
+          videoDetails: { averageRating, channelId, lengthSeconds, shortDescription, thumbnail, viewCount }
+        }
+      } = result.data;
 
-      await fetch(`${API_BASE_URL}/info/${videoId}`)
-        .then(response => response.json())
-        .then(result => {
-          const {
-            author,
-            description,
-            formats,
-            media,
-            published,
-            related_videos,
-            timestamp,
-            title,
-            video_id,
-            video_url,
-            player_response: {
-              videoDetails: { averageRating, channelId, lengthSeconds, shortDescription, thumbnail, viewCount }
-            }
-          } = result;
+      const videoInfo = {
+        author,
+        description,
+        formats,
+        media,
+        published,
+        related_videos,
+        timestamp,
+        title,
+        video_id,
+        video_url,
+        averageRating,
+        channelId,
+        lengthSeconds,
+        shortDescription,
+        thumbnail,
+        viewCount
+      };
 
-          const videoInfo = {
-            author,
-            description,
-            formats,
-            media,
-            published,
-            related_videos,
-            timestamp,
-            title,
-            video_id,
-            video_url,
-            averageRating,
-            channelId,
-            lengthSeconds,
-            shortDescription,
-            thumbnail,
-            viewCount
-          };
-
-          setState({ ...state, info: videoInfo, isLoading: false });
-        })
-        .catch(error => console.log('Request failed', error));
+      setState({ ...state, info: videoInfo, isLoading: false });
     };
     getVideoInfo();
   }, [videoId]);
@@ -85,15 +80,16 @@ const Video = ({
   let downloadOptions = [];
   if (info && info.formats) {
     downloadOptions = info.formats.map((format, key) => {
-      const { resolution, container, type, size, url, audioBitrate } = format;
+      const { resolution, container, type, size, audioBitrate, itag } = format;
       return {
         key,
         text: resolution
           ? `${resolution} ${size ? `(${size})` : ''} - ${container}`
           : `${type.split(';')[0]} - ${container} ${audioBitrate}kbps`,
         value: key,
+        url: info.video_url,
         container,
-        url
+        itag
       };
     });
   }
@@ -121,8 +117,11 @@ const Video = ({
                     placeholder="Download Video"
                     options={downloadOptions}
                     onChange={(e, d) => {
-                      const video = downloadOptions[d.value];
-                      fileDownload(video.url, `${info.title}.${video.container}`);
+                      // Download Video
+                      const { url, itag, container } = downloadOptions[d.value];
+                      window.location.href = `${API_BASE_URL}/download?url=${encodeURIComponent(
+                        url
+                      )}&quality=${itag}&title=${encodeURIComponent(info.title)}.${container}`;
                     }}
                     style={{ minWidth: '25%' }}
                   />

@@ -1,21 +1,18 @@
 import React from 'react';
+import { Result, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { Container, Header, Button } from 'semantic-ui-react';
-import '../error404.css';
 
-const NotFound = () => {
-  return (
-    <Container textAlign="center" className="error-404">
-      <Header as="h1">Oops!</Header>
-      <Header as="h2" color="black">
-        404 - Page not found
-      </Header>
-      <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
-      <Button as={Link} to="/" primary>
-        Go To Homepage
-      </Button>
-    </Container>
-  );
-};
+const NotFound = () => (
+  <Result
+    status="404"
+    title="404"
+    subTitle="Sorry, the page you visited does not exist."
+    extra={
+      <Link to="/">
+        <Button type="primary">Back Home</Button>
+      </Link>
+    }
+  />
+);
 
 export default NotFound;

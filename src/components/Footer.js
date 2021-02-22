@@ -7,7 +7,7 @@ const Footer = () => {
     { icon: 'twitter', color: 'twitter', href: 'https://www.twitter.com/tcmhack', title: 'Twitter' },
     { icon: 'linkedin', color: 'linkedin', href: 'https://www.linkedin.com/company/tcmhack', title: 'Linkedin' },
     { icon: 'whatsapp', color: 'green', href: 'https://wa.me/9571447122/?text=TCMHACK', title: 'WhatsApp' },
-    { icon: 'envelope outline', color: 'teal', href: 'mailto:tikamchand06@gmail.com', title: 'Email' }
+    { icon: 'envelope outline', color: 'teal', href: 'mailto:tikamchand06@gmail.com', title: 'Email' },
   ];
 
   return (

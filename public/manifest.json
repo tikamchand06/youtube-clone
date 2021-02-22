@@ -1,12 +1,12 @@
 {
   "short_name": "YouTube Clone",
   "name": "TCM YouTube Clone",
-  "homepage": "https://tcmytclone.web.app",
+  "homepage": "https://youtube.tcmhack.in",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "favicon.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     }
   ],
   "start_url": ".",

@@ -2,30 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Typography, Image } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
-import { getTrendingVideos, getFavoriteVideos, formatVideoDuration, formatVideoViews } from '../api/youtube';
+import { getTrendingVideos, getChannelVideos, formatVideoDuration, formatVideoViews } from '../api/youtube';
 import Loader from './Loader';
 import Moment from 'react-moment';
 
-const Home = ({ match: { params } }) => {
+const Channel = ({ match: { params } }) => {
   const { Text, Title } = Typography;
-  const isFavorite = params.type && params.type === 'favorites';
   const [state, setState] = useState({ isLoading: true, results: [] });
   const { isLoading, results } = state;
 
   useEffect(() => {
-    const result = isFavorite ? getFavoriteVideos() : getTrendingVideos();
-    result.then((items) => setState({ ...state, results: items, isLoading: false }));
-  }, [getTrendingVideos, getFavoriteVideos, isFavorite]);
+    getTrendingVideos().then((items) => setState({ ...state, results: items, isLoading: false }));
+    getChannelVideos(params.id).then((r) => console.log(r));
+  }, [getTrendingVideos, getChannelVideos, params]);
 
   if (isLoading) return <Loader />;
 
   return (
     <div>
-      {isFavorite && (
-        <Title level={2} style={{ color: '#2196f3' }}>
-          Your Favorite Videos
-        </Title>
-      )}
+      <Title level={2} style={{ color: '#2196f3' }}>
+        Your Channel Videos
+      </Title>
 
       <Row gutter={[16, 16]}>
         {results.map((item, key) => (
@@ -52,4 +49,4 @@ const Home = ({ match: { params } }) => {
   );
 };
 
-export default Home;
+export default Channel;

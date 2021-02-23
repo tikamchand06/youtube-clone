@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const GOOGLE_API_KEY = process.env.REACT_APP_API_KEY;
-const API_BASE_URL = 'http://tcmhack.in:5000/api/youtube';
+const API_BASE_URL = 'https://tcmhack.in:5000/api/youtube';
 const BASE_URL = 'https://www.googleapis.com/youtube/v3/';
 
 export const getTrendingVideos = async () => {
@@ -67,18 +67,11 @@ export const getFavoriteVideos = async () => {
 
 export const getChannelVideos = async (id) => {
   try {
-    const result = await axios.get(BASE_URL + 'channels', {
-      params: {
-        id,
-        regionCode: 'IN',
-        key: GOOGLE_API_KEY,
-        part: 'snippet, contentDetails, statistics',
-      },
-    });
+    const params = { regionCode: 'IN', key: GOOGLE_API_KEY };
+    const result = await axios.get(BASE_URL + 'channels', { params: { id, part: 'snippet, statistics', ...params } }); // Get Channel
+    const result2 = await axios.get(BASE_URL + 'search', { params: { channelId: id, part: 'snippet', ...params } }); // Get Videos
 
-    console.log(result.data);
-
-    return result.data.items;
+    return { channel: result.data.items[0], videos: result2.data.items };
   } catch (error) {
     console.log(error);
   }

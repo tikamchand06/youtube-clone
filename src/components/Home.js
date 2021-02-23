@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Typography, Image } from 'antd';
+import { Row, Col, Typography, Image, Result, Button } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
 import { getTrendingVideos, getFavoriteVideos, formatVideoDuration, formatVideoViews } from '../api/youtube';
 import Loader from './Loader';
@@ -9,7 +9,7 @@ import Moment from 'react-moment';
 const Home = ({ match: { params } }) => {
   const { Text, Title } = Typography;
   const isFavorite = params.type && params.type === 'favorites';
-  const [state, setState] = useState({ isLoading: true, results: [] });
+  const [state, setState] = useState({ isLoading: true, results: null });
   const { isLoading, results } = state;
 
   useEffect(() => {
@@ -21,10 +21,23 @@ const Home = ({ match: { params } }) => {
 
   return (
     <div>
-      {isFavorite && (
-        <Title level={2} style={{ color: '#2196f3' }}>
+      {isFavorite && results.length > 0 && (
+        <Title level={3} style={{ color: '#2196f3' }}>
           Your Favorite Videos
         </Title>
+      )}
+
+      {results.length === 0 && (
+        <Result
+          status="403"
+          title="No videos found."
+          subTitle="Sorry, There are no videos available to show."
+          extra={
+            <Button type="primary" href="/">
+              Back Home
+            </Button>
+          }
+        />
       )}
 
       <Row gutter={[16, 16]}>

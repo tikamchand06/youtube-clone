@@ -71,7 +71,9 @@ export const getChannelVideos = async (id) => {
     const result = await axios.get(BASE_URL + 'channels', { params: { id, part: 'snippet, statistics', ...params } }); // Get Channel
     const result2 = await axios.get(BASE_URL + 'search', { params: { channelId: id, part: 'snippet', ...params } }); // Get Videos
 
-    return { channel: result.data.items[0], videos: result2.data.items };
+    const videos = result2.data.items.filter((item) => item.id.videoId);
+
+    return { channel: result.data.items[0], videos };
   } catch (error) {
     console.log(error);
   }

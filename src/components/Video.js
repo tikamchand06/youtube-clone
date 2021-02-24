@@ -100,8 +100,10 @@ const Video = ({ match: { params } }) => {
               </Button>
             </Tooltip>
 
-            <Dropdown overlay={menu} placement="topRight">
-              <Button icon={<DownloadOutlined />}>Download</Button>
+            <Dropdown overlay={menu} placement="topRight" trigger={['click']}>
+              <Tooltip title="Download">
+                <Button icon={<DownloadOutlined />}>Download</Button>
+              </Tooltip>
             </Dropdown>
           </div>
         </div>
@@ -109,15 +111,19 @@ const Video = ({ match: { params } }) => {
         <div style={{ display: 'flex' }}>
           <Avatar src={videoDetails.author.thumbnails[0].url} />
           <div style={{ marginLeft: 10, width: '100%' }}>
-            <Link to={'/channel/' + videoDetails.author.id}>
-              <p style={{ fontWeight: 'bold', fontSize: 16, margin: 0 }}>{videoDetails.author.name}</p>
-              <Text>{formatVideoViews(videoDetails.author.subscriber_count)} Subscribers</Text>
-            </Link>
+            <p style={{ fontWeight: 'bold', fontSize: 16, margin: 0 }}>
+              <Link to={'/channel/' + videoDetails.author.id}>
+                {videoDetails.author.name} <CheckCircleFilled style={{ fontSize: '0.8rem' }} />
+              </Link>
+            </p>
+            <Text>{formatVideoViews(videoDetails.author.subscriber_count)} Subscribers</Text>
 
-            <p
-              style={{ fontWeight: 'bold', marginTop: 10 }}
-              dangerouslySetInnerHTML={{ __html: newLineToBr(videoDetails.description) }}
-            />
+            {videoDetails.description && (
+              <p
+                style={{ fontWeight: 'bold', marginTop: 10 }}
+                dangerouslySetInnerHTML={{ __html: newLineToBr(videoDetails.description) }}
+              />
+            )}
           </div>
         </div>
       </Col>
@@ -139,7 +145,7 @@ const Video = ({ match: { params } }) => {
                     {item.title}
                   </Link>
                   <Link to={'/channel/' + item.author.id} style={{ color: '#424242' }}>
-                    <span style={{ marginRight: 5 }}>{item.author.name}</span> <CheckCircleFilled />
+                    <span style={{ marginRight: 5 }}>{item.author.name}</span> <CheckCircleFilled style={{ fontSize: '0.8rem' }} />
                   </Link>
                   <Text strong>
                     <span>{item.short_view_count_text} views</span>

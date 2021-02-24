@@ -22,10 +22,18 @@ const App = () => {
   const [options, setOptions] = useState([]);
   const { Header, Content, Footer } = Layout;
 
-  const onSelect = (title, obj) => (window.location.href = window.location.origin + '/watch/' + obj.videoid);
-  const onSearch = async (str) => {
-    const results = await searchVideo(str);
-    const options = results.map((r) => ({ videoid: r.id.videoId, label: r.snippet.title, value: r.snippet.title }));
+  const onSelect = (title, obj) => {
+    window.location.href = window.location.origin + (obj.ischannel ? '/channel/' : '/watch/') + obj.key;
+  };
+
+  const onSearch = async (title) => {
+    if (!title || !title.trim()) {
+      setOptions([]);
+      return false;
+    }
+
+    const results = await searchVideo(title);
+    const options = results.map((r) => ({ value: r.snippet.title, ischannel: r.id.channelId, key: r.id.videoId || r.id.channelId }));
     setOptions(options);
   };
 

@@ -51,7 +51,7 @@ const Home = ({ match: { params } }) => {
               <Text strong>{item.snippet.title}</Text>
             </Link>
             <Link to={'/channel/' + item.snippet.channelId} style={{ display: 'block' }}>
-              <span style={{ marginRight: 5 }}>{item.snippet.channelTitle}</span> <CheckCircleFilled />
+              <span style={{ marginRight: 5 }}>{item.snippet.channelTitle}</span> <CheckCircleFilled style={{ fontSize: '0.8rem' }} />
             </Link>
             <p style={{ color: '#212121' }}>
               <span>{formatVideoViews(item.statistics.viewCount)}</span>

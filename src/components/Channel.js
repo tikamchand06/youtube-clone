@@ -25,7 +25,7 @@ const Channel = ({ match: { params } }) => {
         <Image src={channel.snippet.thumbnails.medium.url} style={{ maxWidth: 125 }} />
         <div>
           <Title level={4} style={{ color: '#2196f3', margin: 0 }}>
-            <span style={{ marginRight: 5 }}>{channel.snippet.title}</span> <CheckCircleFilled />
+            <span style={{ marginRight: 5 }}>{channel.snippet.title}</span> <CheckCircleFilled style={{ fontSize: '1rem' }} />
           </Title>
           <Text strong>{channel.snippet.description}</Text>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 'bold' }}>

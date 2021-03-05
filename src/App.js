@@ -80,8 +80,8 @@ const App = () => {
           <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
             <Col>
               {process.env.REACT_APP_NAME} &copy; {new Date().getFullYear()} Created by{' '}
-              <a href="https://www.tcmhack.in" target="_blank" rel="noopener noreferrer">
-                TCMHACK
+              <a href="https://admin.tcmhack.in" target="_blank" rel="noopener noreferrer">
+                TIKAM CHAND
               </a>
             </Col>
             <Col>

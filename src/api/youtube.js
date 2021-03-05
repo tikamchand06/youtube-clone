@@ -108,3 +108,15 @@ export const addToFavorite = (videoId) => {
 };
 
 export const isFavorite = (videoId) => localStorage.yt_videos && JSON.parse(localStorage.yt_videos).includes(videoId);
+
+export const getVideoThubmnailURL = (thumbnails, resoltion = null) => {
+  if (resoltion && thumbnails[resoltion]) return thumbnails[resoltion].url;
+
+  const { high, standard, medium, maxres } = thumbnails;
+  if (standard) return standard.url;
+  if (high) return high.url;
+  if (medium) return medium.url;
+  if (thumbnails.default) return medium.url;
+  if (maxres) return maxres.url;
+  return '';
+};

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Typography, Image, Result, Button } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
-import { getTrendingVideos, getFavoriteVideos, formatVideoDuration, formatVideoViews } from '../api/youtube';
+import { getTrendingVideos, getFavoriteVideos, formatVideoDuration, formatVideoViews, getVideoThubmnailURL } from '../api/youtube';
 import Loader from './Loader';
 import Moment from 'react-moment';
 
@@ -45,7 +45,7 @@ const Home = ({ match: { params } }) => {
           <Col key={key} span={6}>
             <Link to={`/watch/${item.id}`}>
               <div style={{ position: 'relative' }}>
-                <Image src={item.snippet.thumbnails.standard.url} />
+                <Image src={getVideoThubmnailURL(item.snippet.thumbnails)} />
                 <span className="duration">{formatVideoDuration(item.contentDetails.duration)}</span>
               </div>
               <Text strong>{item.snippet.title}</Text>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Typography, Image, Divider } from 'antd';
 import { CheckCircleFilled, CheckCircleOutlined, VideoCameraOutlined, EyeOutlined } from '@ant-design/icons';
-import { getChannelVideos, formatVideoViews } from '../api/youtube';
+import { getChannelVideos, formatVideoViews, getVideoThubmnailURL } from '../api/youtube';
 import Loader from './Loader';
 import Moment from 'react-moment';
 
@@ -22,7 +22,7 @@ const Channel = ({ match: { params } }) => {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <Image src={channel.snippet.thumbnails.medium.url} style={{ maxWidth: 125 }} />
+        <Image src={getVideoThubmnailURL(channel.snippet.thumbnails, 'medium')} style={{ maxWidth: 125 }} />
         <div>
           <Title level={4} style={{ color: '#2196f3', margin: 0 }}>
             <span style={{ marginRight: 5 }}>{channel.snippet.title}</span> <CheckCircleFilled style={{ fontSize: '1rem' }} />
